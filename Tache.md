@@ -32,6 +32,12 @@ création de base de données `base.sql`
  - retrait
  - transfert
 
+**interface :**
+
+ - création des vues Bootstrap
+ - navigation entre les pages
+ - validation des formulaires
+
 **tests et correction de la base de données**
 
 ---
@@ -49,9 +55,6 @@ création de base de données `base.sql`
 
  - AuthController.php
  - ClientController.php
- - DepotController.php
- - RetraitController.php
- - TransfertController.php
  - HistoriqueController.php
  - PrefixeController.php
  - BaremeController.php
