@@ -185,6 +185,7 @@
   },
   "active": "e5b8df27f186b574",
   "lastOpenFiles": [
+<<<<<<< Updated upstream
     "writable/debugbar/debugbar_1784556669.095125.json",
     "writable/debugbar/debugbar_1784556647.462116.json",
     "writable/debugbar/debugbar_1784556647.440808.json",
@@ -196,6 +197,19 @@
     "writable/debugbar/debugbar_1784556598.711225.json",
     "writable/debugbar/debugbar_1784556597.358161.json",
     "writable/session/ci_sessiona8e0283a7f017128128cb7ec35936c31",
+=======
+    "writable/debugbar/debugbar_1784544478.921211.json",
+    "writable/debugbar/debugbar_1784544478.891036.json",
+    "writable/debugbar/debugbar_1784544471.851787.json",
+    "writable/debugbar/debugbar_1784544434.238345.json",
+    "writable/debugbar/debugbar_1784544414.653576.json",
+    "writable/debugbar/debugbar_1784544413.648224.json",
+    "writable/debugbar/debugbar_1784544380.141064.json",
+    "writable/debugbar/debugbar_1784544379.094182.json",
+    "writable/debugbar/debugbar_1784544379.079650.json",
+    "writable/debugbar/debugbar_1784544377.713575.json",
+    "writable/debugbar/debugbar_1784544376.073939.json",
+>>>>>>> Stashed changes
     "README.md",
     "Tache.md"
   ]
