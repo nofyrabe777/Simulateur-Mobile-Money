@@ -185,17 +185,17 @@
   },
   "active": "e5b8df27f186b574",
   "lastOpenFiles": [
+    "app/Views/operateur/dashboard.php",
+    "app/Views/operateur",
+    "writable/session/ci_session260f955ea8cda747b73263a7fa1027ea",
+    "writable/session/ci_session6c73738f9335bd47388465bde015b4c1",
+    "app/Views/layout.php",
+    "app/Views/index.php",
     "writable/session/ci_session5742f398d160b83e2f3aebae2db0f038",
     "app/Controllers/TransfertController.php",
     "app/Controllers/RetraitController.php",
     "app/Controllers/DepotController.php",
     "app/Controllers/PrefixeController.php",
-    "app/Controllers/HistoriqueController.php",
-    "app/Controllers/ClientController.php",
-    "app/Controllers/BaremeController.php",
-    "app/Controllers/AuthController.php",
-    "app/Models/TransactionsModel.php",
-    "app/Controllers/TransactionsController.php",
     "Tache.md"
   ]
 }
