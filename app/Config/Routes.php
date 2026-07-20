@@ -1,18 +1,13 @@
 <?php
-
 use CodeIgniter\Router\RouteCollection;
-
+use App\Controllers\ClientController;
+use App\Controllers\HistoriqueController;
+use App\Controllers\PrefixeController;
+use App\Controllers\BaremeController;
+use App\Controllers\TransactionsController;
 /**
  * @var RouteCollection $routes
  */
-<?php
-
-use CodeIgniter\Router\RouteCollection;
-
-/**
- * @var RouteCollection $routes
- */
-
 // --- ACCUEIL & AUTHENTIFICATION ---
 $routes->get('/', 'ClientController::dashboard'); 
 // Redirige vers le dashboard (qui gère le filtre de session) ou une vue login
@@ -35,4 +30,15 @@ $routes->group('operateur', function($routes) {
     
     // Gestion des barèmes (Mise à jour des tranches de frais)
     $routes->post('bareme/update', 'BaremeController::update');
+});
+
+$routes->group('transaction', function ($routes) {
+    // Affichage du solde et de l'historique d'un compte
+    // Exemple d'URL : GET /transaction/compte/1
+    $routes->get('compte/(:num)', 'TransactionsController::index/$1');
+
+    // Effectuer les opérations (méthode POST)
+    $routes->post('depot', 'TransactionsController::depot');
+    $routes->post('retrait', 'TransactionsController::retrait');
+    $routes->post('transfert', 'TransactionsController::transfert');
 });

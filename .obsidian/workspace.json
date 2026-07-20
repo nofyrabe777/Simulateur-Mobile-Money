@@ -185,17 +185,17 @@
   },
   "active": "e5b8df27f186b574",
   "lastOpenFiles": [
-    "app/Controllers/TransactionsController.php",
+    "app/Controllers/TransfertController.php",
+    "app/Controllers/RetraitController.php",
+    "app/Controllers/PrefixeController.php",
+    "app/Controllers/HistoriqueController.php",
+    "app/Controllers/DepotController.php",
+    "app/Controllers/ClientController.php",
+    "app/Controllers/BaremeController.php",
+    "app/Controllers/AuthController.php",
     "app/Models/TransactionsModel.php",
+    "app/Controllers/TransactionsController.php",
     "app/Models/TransactionModel.php",
-    "app/Models/TypeOperationModel",
-    "app/Models/PrefixeModel.php",
-    "app/Models/CompteModel.php",
-    "app/Models/BaremesModel.php",
-    "writable/simulateur_mobile_money.sqlite",
-    "base.sql",
-    "writable/simulateur_mobile_money.sqlite-journal",
-    "base,sql",
     "Tache.md"
   ]
 }
