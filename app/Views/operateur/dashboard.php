@@ -54,7 +54,7 @@
             <div class="card-header bg-white py-3 fw-bold">Configuration des Préfixes</div>
             <div class="card-body">
                 <form action="<?= base_url('operateur/prefixe/add') ?>" method="POST" class="d-flex mb-3">
-                    <input type="text" name="prefixe" class="form-control me-2" placeholder="Ex: 034" required maxlen="10">
+                    <input type="text" name="prefixe" class="form-control me-2" placeholder="Ex: XXX XX XXX XXX" required maxlen="10">
                     <button type="submit" class="btn btn-primary btn-sm">Ajouter</button>
                 </form>
                 <div class="d-flex flex-wrap gap-2">

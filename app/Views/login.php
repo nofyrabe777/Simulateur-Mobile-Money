@@ -13,7 +13,7 @@
                 <form action="<?= base_url('auth/login') ?>" method="POST">
                     <div class="mb-3">
                         <label for="tel" class="form-label">Numéro de téléphone</label>
-                        <input type="text" class="form-control form-control-lg" id="tel" name="tel" placeholder="Ex: 033/037 XX XXX XX" required>
+                        <input type="text" class="form-control form-control-lg" id="tel" name="tel" placeholder="Ex:  XXX XX XXX XX" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg w-100">Se connecter</button>
                 </form>
