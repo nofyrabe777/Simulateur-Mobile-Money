@@ -25,7 +25,7 @@ class Database extends Config
      * @var array<string, mixed>
      */
     public array $default = [
-        'database'    => ROOTPATH . 'writable' . DIRECTORY_SEPARATOR . 'database.sqlite',
+        'database'    => ROOTPATH . 'writable' . DIRECTORY_SEPARATOR . 'simulateur_mobile_money.sqlite',
         'DBDriver'    => 'SQLite3',
         'DBPrefix'    => '',
         'DBDebug'     => true,
