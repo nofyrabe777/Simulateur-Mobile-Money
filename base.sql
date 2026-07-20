@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS transactions (
 
 
 
-INSERT OR IGNORE INTO prefixes (prefixe) VALUES ('033'), ('037');
+INSERT OR IGNORE INTO prefixes (prefixe) VALUES ('033'), ('037'),('032'),('034');
 
 
 INSERT OR IGNORE INTO type_operations (id, nom) VALUES 
