@@ -29,4 +29,5 @@ $routes->group('operateur', function($routes) {
     // Actions de configuration
     $routes->post('prefixe/add', 'PrefixeController::store');
     $routes->post('bareme/update', 'BaremeController::update');
+    $routes->post('commission/update', 'OperateurConfigController::updateCommission');
 });

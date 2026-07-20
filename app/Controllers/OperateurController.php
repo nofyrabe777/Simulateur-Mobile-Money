@@ -6,6 +6,8 @@ use App\Models\CompteModel;
 use App\Models\PrefixeModel;
 use App\Models\BaremesModel;
 use App\Models\TransactionsModel;
+use App\Models\OperateurModel;
+use App\Models\InteroperatorCommissionModel;
 
 class OperateurController extends BaseController
 {
@@ -23,7 +25,14 @@ class OperateurController extends BaseController
 
         // 2. Récupération des données pour les tableaux
         $clients = $compteModel->findAll();
-        $prefixes = $prefixeModel->findAll();
+        $prefixes = $prefixeModel->select('prefixes.*, operateurs.nom as operateur, operateurs.type_reseau')
+                                ->join('operateurs', 'operateurs.id = prefixes.id_operateur')
+                                ->findAll();
+        $operateurs = (new \App\Models\OperateurModel())->findAll();
+        $commissions = (new \App\Models\InteroperatorCommissionModel())
+                        ->select('interoperator_commissions.*, operateurs.nom')
+                        ->join('operateurs', 'operateurs.id = interoperator_commissions.id_operateur')
+                        ->findAll();
         
         // Jointure pour afficher le nom du type d'opération lisiblement
         $baremes = $baremeModel->select('baremes.*, type_operations.nom as type')
@@ -37,6 +46,8 @@ class OperateurController extends BaseController
             'gains_totaux'    => $gains_totaux,
             'clients'         => $clients,
             'prefixes'        => $prefixes,
+            'operateurs'      => $operateurs,
+            'commissions'     => $commissions,
             'baremes'         => $baremes
         ]);
     }

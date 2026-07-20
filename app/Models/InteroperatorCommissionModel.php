@@ -4,13 +4,11 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PrefixeModel extends Model
+class InteroperatorCommissionModel extends Model
 {
-    protected $table            = 'prefixes';
+    protected $table            = 'interoperator_commissions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $allowedFields    = ['prefixe', 'id_operateur'];
+    protected $allowedFields    = ['id_operateur', 'pourcentage'];
 }
-
-?>
