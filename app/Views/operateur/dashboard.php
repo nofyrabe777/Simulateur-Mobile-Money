@@ -66,7 +66,6 @@
         </div>
     </div>
 </div>
-
 <!-- Configuration des barèmes -->
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-white py-3 fw-bold">Configuration des Barèmes de Frais</div>
@@ -99,3 +98,6 @@
     </div>
 </div>
 <?= $this->endSection() ?>
+<script src="public/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
