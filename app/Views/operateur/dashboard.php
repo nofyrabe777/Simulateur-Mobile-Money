@@ -25,7 +25,7 @@
 <div class="row mb-4">
     <!-- Situation des comptes clients -->
     <div class="col-md-7">
-        <div class="card shadow-sm h-100">
+        <div class="card shadow-sm h-100"> 
             <div class="card-header bg-white py-3 fw-bold">Situation des Comptes Clients</div>
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
