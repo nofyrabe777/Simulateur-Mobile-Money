@@ -1,33 +1,43 @@
 <?php
+
 namespace App\Controllers;
 
-use App\Models\BaremesModel;
 use App\Models\CompteModel;
 use App\Models\PrefixeModel;
+use App\Models\BaremesModel;
 use App\Models\TransactionsModel;
 
 class OperateurController extends BaseController
 {
     public function dashboard()
     {
-        $prefixeModel = new PrefixeModel();
         $compteModel = new CompteModel();
+        $prefixeModel = new PrefixeModel();
         $baremeModel = new BaremesModel();
-        $transactionModel = new TransactionsModel();
+        $txModel = new TransactionsModel();
 
+        // 1. Calcul des gains via les frais de transactions (Type 2 = Retrait, Type 3 = Transfert)
+        $gains_retrait = $txModel->where('id_type_operation', 2)->selectSum('frais')->first()['frais'] ?? 0;
+        $gains_transfert = $txModel->where('id_type_operation', 3)->selectSum('frais')->first()['frais'] ?? 0;
+        $gains_totaux = $gains_retrait + $gains_transfert;
+
+        // 2. Récupération des données pour les tableaux
+        $clients = $compteModel->findAll();
         $prefixes = $prefixeModel->findAll();
-        $comptes = $compteModel->orderBy('created_at', 'DESC')->findAll();
-        $baremes = $baremeModel->orderBy('id_type_operation', 'ASC')->orderBy('montant_min', 'ASC')->findAll();
+        
+        // Jointure pour afficher le nom du type d'opération lisiblement
+        $baremes = $baremeModel->select('baremes.*, type_operations.nom as type')
+                              ->join('type_operations', 'type_operations.id = baremes.id_type_operation')
+                              ->findAll();
 
-        $totalGains = $transactionModel->selectSum('frais')->first();
-        $totalClients = $compteModel->countAllResults();
-
+        // 3. Envoi complet des variables à la vue
         return view('operateur/dashboard', [
-            'prefixes' => $prefixes,
-            'comptes' => $comptes,
-            'baremes' => $baremes,
-            'totalGains' => (float) ($totalGains['frais'] ?? 0),
-            'totalClients' => $totalClients,
+            'gains_retrait'   => $gains_retrait,
+            'gains_transfert' => $gains_transfert,
+            'gains_totaux'    => $gains_totaux,
+            'clients'         => $clients,
+            'prefixes'        => $prefixes,
+            'baremes'         => $baremes
         ]);
     }
 }
