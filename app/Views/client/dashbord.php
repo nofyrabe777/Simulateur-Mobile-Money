@@ -2,25 +2,23 @@
 
 <?= $this->section('content') ?>
 <div class="row mb-4">
-    <!-- Carte du solde -->
     <div class="col-md-12">
-        <div class="card bg-gradient bg-primary text-white p-4 shadow-sm">
+        <div class="card bg-primary text-white p-4 shadow-sm">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-uppercase mb-1 text-white-50">Solde Disponible</h6>
                     <h1 class="display-5 fw-bold"><?= number_format($compte['solde'], 2, ',', ' ') ?> <small class="fs-4">Ar</small></h1>
                 </div>
                 <div>
-                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalDepot"> Dépôt</button>
-                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalRetrait">Retrait</button>
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTransfert"> Transfert</button>
+                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalDepot">➕ Dépôt</button>
+                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalRetrait">➖ Retrait</button>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTransfert">✈️ Transfert</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Section Historique -->
 <div class="card shadow-sm">
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
         <h5 class="mb-0 fw-bold">Historique récent des transactions</h5>
@@ -60,7 +58,7 @@
     </div>
 </div>
 
-<!-- ================= MODALE DÉPÔT ================= -->
+<!-- ================= MODALE DÉPÔT (type_operation = 1) ================= -->
 <div class="modal fade" id="modalDepot" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form action="<?= base_url('client/transaction') ?>" method="POST" class="modal-content">
@@ -83,7 +81,7 @@
     </div>
 </div>
 
-<!-- ================= MODALE RETRAIT ================= -->
+<!-- ================= MODALE RETRAIT (type_operation = 2) ================= -->
 <div class="modal fade" id="modalRetrait" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form action="<?= base_url('client/transaction') ?>" method="POST" class="modal-content">
@@ -96,7 +94,6 @@
                 <div class="mb-3">
                     <label class="form-label">Montant à retirer (Ar)</label>
                     <input type="number" step="0.01" name="montant" class="form-control" required min="1">
-                    <small class="text-muted">Des frais seront appliqués automatiquement selon votre barème.</small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -107,7 +104,7 @@
     </div>
 </div>
 
-<!-- ================= MODALE TRANSFERT ================= -->
+<!-- ================= MODALE TRANSFERT (type_operation = 3) ================= -->
 <div class="modal fade" id="modalTransfert" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form action="<?= base_url('client/transaction') ?>" method="POST" class="modal-content">
