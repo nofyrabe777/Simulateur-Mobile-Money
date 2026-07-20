@@ -6,7 +6,7 @@ use App\Models\TransactionsModel;
 use App\Models\CompteModel;
 use App\Models\BaremesModel;
 
-class TransactionController extends BaseController
+class TransactionsController extends BaseController
 {
     protected $transactionModel;
     protected $compteModel;
@@ -17,6 +17,32 @@ class TransactionController extends BaseController
         $this->transactionModel = new TransactionsModel();
         $this->compteModel      = new CompteModel();
         $this->baremeModel      = new BaremesModel();
+    }
+
+    /**
+     * Dispatche les opérations selon le type
+     */
+    public function store()
+    {
+        $typeOp = (int) $this->request->getPost('type_operation');
+        $session = session()->get('client_session');
+
+        if (!$session) {
+            return redirect()->to('/');
+        }
+
+        $montant = (float) $this->request->getPost('montant');
+
+        if ($typeOp === 1) {
+            return $this->depot($session['id'], $montant);
+        } elseif ($typeOp === 2) {
+            return $this->retrait($session['id'], $montant);
+        } elseif ($typeOp === 3) {
+            $destinataire = $this->request->getPost('destinataire');
+            return $this->transfert($session['id'], $destinataire, $montant);
+        }
+
+        return redirect()->back()->with('error', 'Type d\'opération invalide.');
     }
 
     /**
@@ -56,169 +82,175 @@ class TransactionController extends BaseController
     /**
      * Dépôt : Aucun frais
      */
-    public function depot()
+    public function depot($compteId = null, $montant = null)
     {
-        $compteId = $this->request->getPost('compte_id');
-        $montant  = (float) $this->request->getPost('montant');
+        if (!$compteId || !$montant) {
+            $compteId = $this->request->getPost('compte_id');
+            $montant  = (float) $this->request->getPost('montant');
+        }
 
         if ($montant <= 0) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Montant invalide']);
+            return redirect()->back()->with('error', 'Montant invalide');
         }
 
-        $compte = $this->compteModel->find($compteId);
-        if (!$compte) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Compte inexistant']);
+        try {
+            $compte = $this->compteModel->find($compteId);
+            if (!$compte) {
+                return redirect()->back()->with('error', 'Compte inexistant');
+            }
+
+            $db = \Config\Database::connect();
+            $db->transStart();
+
+            // 1. Calcul et mise à jour du nouveau solde
+            $nouveauSolde = $compte['solde'] + $montant;
+            $this->compteModel->update($compteId, ['solde' => $nouveauSolde]);
+
+            // 2. Enregistrement de la transaction (1 = Dépôt)
+            $this->transactionModel->insert([
+                'id_type_operation'     => 1,
+                'id_compte_expediteur'  => $compteId,
+                'id_compte_destinataire'=> null,
+                'montant'               => $montant,
+                'frais'                 => 0.0
+            ]);
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                return redirect()->back()->with('error', 'Erreur lors du dépôt');
+            }
+
+            return redirect()->to('client/dashboard')->with('success', 'Dépôt de ' . number_format($montant, 2, ',', ' ') . ' Ar réussi!');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Erreur: ' . $e->getMessage());
         }
-
-        $db = \Config\Database::connect();
-        $db->transStart();
-
-        // 1. Calcul et mise à jour du nouveau solde
-        $nouveauSolde = $compte['solde'] + $montant;
-        $this->compteModel->update($compteId, ['solde' => $nouveauSolde]);
-
-        // 2. Enregistrement de la transaction (1 = Dépôt)
-        $this->transactionModel->insert([
-            'id_type_operation'     => 1,
-            'id_compte_expediteur'  => $compteId,
-            'id_compte_destinataire'=> null,
-            'montant'               => $montant,
-            'frais'                 => 0.0
-        ]);
-
-        $db->transComplete();
-
-        if ($db->transStatus() === false) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Erreur lors du dépôt']);
-        }
-
-        return $this->response->setJSON([
-            'status'        => 'success',
-            'message'       => 'Dépôt réussi',
-            'nouveau_solde' => $nouveauSolde
-        ]);
     }
 
     /**
      * Retrait : Calcul des frais + Vérification solde
      */
-    public function retrait()
+    public function retrait($compteId = null, $montant = null)
     {
-        $compteId = $this->request->getPost('compte_id');
-        $montant  = (float) $this->request->getPost('montant');
+        if (!$compteId || !$montant) {
+            $compteId = $this->request->getPost('compte_id');
+            $montant  = (float) $this->request->getPost('montant');
+        }
 
         if ($montant <= 0) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Montant invalide']);
+            return redirect()->back()->with('error', 'Montant invalide');
         }
 
-        $compte = $this->compteModel->find($compteId);
-        if (!$compte) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Compte inexistant']);
-        }
+        try {
+            $compte = $this->compteModel->find($compteId);
+            if (!$compte) {
+                return redirect()->back()->with('error', 'Compte inexistant');
+            }
 
-        // --- CALCULS ET VALIDATION DANS LE CONTRÔLEUR ---
-        $frais = $this->calculerFrais(2, $montant); // 2 = Retrait
-        $totalADebiter = $montant + $frais;
+            // --- CALCULS ET VALIDATION DANS LE CONTRÔLEUR ---
+            $frais = $this->calculerFrais(2, $montant); // 2 = Retrait
+            $totalADebiter = $montant + $frais;
 
-        if ($compte['solde'] < $totalADebiter) {
-            return $this->response->setJSON([
-                'status'  => 'error', 
-                'message' => 'Solde insuffisant. Requis : ' . $totalADebiter . ' Ar (Montant: ' . $montant . ' + Frais: ' . $frais . ')'
+            if ($compte['solde'] < $totalADebiter) {
+                return redirect()->back()->with('error', 'Solde insuffisant. Requis: ' . number_format($totalADebiter, 2, ',', ' ') . ' Ar (Montant: ' . number_format($montant, 2, ',', ' ') . ' + Frais: ' . number_format($frais, 2, ',', ' ') . ')');
+            }
+
+            $db = \Config\Database::connect();
+            $db->transStart();
+
+            // 1. Mise à jour du solde
+            $nouveauSolde = $compte['solde'] - $totalADebiter;
+            $this->compteModel->update($compteId, ['solde' => $nouveauSolde]);
+
+            // 2. Enregistrement transaction
+            $this->transactionModel->insert([
+                'id_type_operation'     => 2,
+                'id_compte_expediteur'  => $compteId,
+                'id_compte_destinataire'=> null,
+                'montant'               => $montant,
+                'frais'                 => $frais
             ]);
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                return redirect()->back()->with('error', 'Erreur lors du retrait');
+            }
+
+            return redirect()->to('client/dashboard')->with('success', 'Retrait de ' . number_format($montant, 2, ',', ' ') . ' Ar effectué (frais: ' . number_format($frais, 2, ',', ' ') . ' Ar)');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Erreur: ' . $e->getMessage());
         }
-
-        $db = \Config\Database::connect();
-        $db->transStart();
-
-        // 1. Mise à jour du solde
-        $nouveauSolde = $compte['solde'] - $totalADebiter;
-        $this->compteModel->update($compteId, ['solde' => $nouveauSolde]);
-
-        // 2. Enregistrement transaction
-        $this->transactionModel->insert([
-            'id_type_operation'     => 2,
-            'id_compte_expediteur'  => $compteId,
-            'id_compte_destinataire'=> null,
-            'montant'               => $montant,
-            'frais'                 => $frais
-        ]);
-
-        $db->transComplete();
-
-        if ($db->transStatus() === false) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Erreur lors du retrait']);
-        }
-
-        return $this->response->setJSON([
-            'status'        => 'success',
-            'message'       => 'Retrait effectué avec succès',
-            'frais'         => $frais,
-            'nouveau_solde' => $nouveauSolde
-        ]);
     }
 
     /**
      * Transfert : Calcul des frais + Débit expéditeur + Crédit destinataire
      */
-    public function transfert()
+    public function transfert($expediteurId = null, $destinataireTel = null, $montant = null)
     {
-        $expediteurId   = $this->request->getPost('expediteur_id');
-        $destinataireId = $this->request->getPost('destinataire_id');
-        $montant        = (float) $this->request->getPost('montant');
-
-        if ($montant <= 0 || $expediteurId == $destinataireId) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Informations de transfert invalides']);
+        if (!$expediteurId || !$destinataireTel || !$montant) {
+            $expediteurId   = $this->request->getPost('expediteur_id');
+            $destinataireTel = $this->request->getPost('destinataire_tel');
+            $montant        = (float) $this->request->getPost('montant');
         }
 
-        $expediteur   = $this->compteModel->find($expediteurId);
-        $destinataire = $this->compteModel->find($destinataireId);
-
-        if (!$expediteur || !$destinataire) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Compte expéditeur ou destinataire introuvable']);
+        if ($montant <= 0) {
+            return redirect()->back()->with('error', 'Montant invalide');
         }
 
-        // --- CALCULS ET VALIDATION DANS LE CONTRÔLEUR ---
-        $frais = $this->calculerFrais(3, $montant); // 3 = Transfert
-        $totalADebiter = $montant + $frais;
+        try {
+            $expediteur   = $this->compteModel->find($expediteurId);
+            $destinataire = $this->compteModel->where('telephone', $destinataireTel)->first();
 
-        if ($expediteur['solde'] < $totalADebiter) {
-            return $this->response->setJSON([
-                'status'  => 'error', 
-                'message' => 'Solde insuffisant pour le transfert (Total requis avec frais: ' . $totalADebiter . ' Ar)'
+            if (!$expediteur) {
+                return redirect()->back()->with('error', 'Compte expéditeur introuvable');
+            }
+
+            if (!$destinataire) {
+                return redirect()->back()->with('error', 'Destinataire non trouvé: ' . $destinataireTel);
+            }
+
+            if ($expediteurId == $destinataire['id']) {
+                return redirect()->back()->with('error', 'Impossible de transférer vers votre propre compte');
+            }
+
+            // --- CALCULS ET VALIDATION DANS LE CONTRÔLEUR ---
+            $frais = $this->calculerFrais(3, $montant); // 3 = Transfert
+            $totalADebiter = $montant + $frais;
+
+            if ($expediteur['solde'] < $totalADebiter) {
+                return redirect()->back()->with('error', 'Solde insuffisant. Requis: ' . number_format($totalADebiter, 2, ',', ' ') . ' Ar');
+            }
+
+            $db = \Config\Database::connect();
+            $db->transStart();
+
+            // 1. Débit expéditeur
+            $nouveauSoldeExp = $expediteur['solde'] - $totalADebiter;
+            $this->compteModel->update($expediteurId, ['solde' => $nouveauSoldeExp]);
+
+            // 2. Crédit destinataire
+            $nouveauSoldeDest = $destinataire['solde'] + $montant;
+            $this->compteModel->update($destinataire['id'], ['solde' => $nouveauSoldeDest]);
+
+            // 3. Enregistrement transaction
+            $this->transactionModel->insert([
+                'id_type_operation'     => 3,
+                'id_compte_expediteur'  => $expediteurId,
+                'id_compte_destinataire'=> $destinataire['id'],
+                'montant'               => $montant,
+                'frais'                 => $frais
             ]);
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                return redirect()->back()->with('error', 'Erreur lors du transfert');
+            }
+
+            return redirect()->to('client/dashboard')->with('success', 'Transfert de ' . number_format($montant, 2, ',', ' ') . ' Ar vers ' . $destinataireTel . ' réussi (frais: ' . number_format($frais, 2, ',', ' ') . ' Ar)');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Erreur: ' . $e->getMessage());
         }
-
-        $db = \Config\Database::connect();
-        $db->transStart();
-
-        // 1. Débit expéditeur
-        $nouveauSoldeExp = $expediteur['solde'] - $totalADebiter;
-        $this->compteModel->update($expediteurId, ['solde' => $nouveauSoldeExp]);
-
-        // 2. Crédit destinataire
-        $nouveauSoldeDest = $destinataire['solde'] + $montant;
-        $this->compteModel->update($destinataireId, ['solde' => $nouveauSoldeDest]);
-
-        // 3. Enregistrement transaction
-        $this->transactionModel->insert([
-            'id_type_operation'     => 3,
-            'id_compte_expediteur'  => $expediteurId,
-            'id_compte_destinataire'=> $destinataireId,
-            'montant'               => $montant,
-            'frais'                 => $frais
-        ]);
-
-        $db->transComplete();
-
-        if ($db->transStatus() === false) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Erreur lors du transfert']);
-        }
-
-        return $this->response->setJSON([
-            'status'        => 'success',
-            'message'       => 'Transfert réussi',
-            'frais'         => $frais,
-            'nouveau_solde' => $nouveauSoldeExp
-        ]);
     }
 }

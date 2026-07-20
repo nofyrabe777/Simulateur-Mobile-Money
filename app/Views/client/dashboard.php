@@ -63,6 +63,7 @@
     <div class="modal-dialog">
         <form action="<?= base_url('client/transaction') ?>" method="POST" class="modal-content">
             <input type="hidden" name="type_operation" value="1">
+            <input type="hidden" name="compte_id" value="<?= $compte['id'] ?>">
             <div class="modal-header">
                 <h5 class="modal-title">Faire un dépôt automatique</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -86,6 +87,7 @@
     <div class="modal-dialog">
         <form action="<?= base_url('client/transaction') ?>" method="POST" class="modal-content">
             <input type="hidden" name="type_operation" value="2">
+            <input type="hidden" name="compte_id" value="<?= $compte['id'] ?>">
             <div class="modal-header">
                 <h5 class="modal-title">Faire un retrait automatique</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -109,6 +111,7 @@
     <div class="modal-dialog">
         <form action="<?= base_url('client/transaction') ?>" method="POST" class="modal-content">
             <input type="hidden" name="type_operation" value="3">
+            <input type="hidden" name="expediteur_id" value="<?= $compte['id'] ?>">
             <div class="modal-header">
                 <h5 class="modal-title">Effectuer un transfert d'argent</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -116,7 +119,7 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">Numéro du destinataire</label>
-                    <input type="text" name="destinataire" class="form-control" placeholder="Ex: 033XXXXXXXX" required>
+                    <input type="text" name="destinataire_tel" class="form-control" placeholder="Ex: 033XXXXXXXX" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Montant à transférer (Ar)</label>
