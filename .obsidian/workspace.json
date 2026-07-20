@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tache.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tache"
+              "title": "README"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Tache.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rétrolien pour Tache"
+              "title": "Rétrolien pour README"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Tache.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Liens sortants de Tache"
+              "title": "Liens sortants de README"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Tache.md",
+                "file": "README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Plan de Tache"
+              "title": "Plan de README"
             }
           }
         ]
@@ -185,17 +185,16 @@
   },
   "active": "e5b8df27f186b574",
   "lastOpenFiles": [
+    "Tache.md",
     "writable/debugbar/debugbar_1784542424.254231.json",
     "writable/debugbar/debugbar_1784542424.235790.json",
-    "writable/simulateur_mobile_money.sqlite-journal",
     "writable/debugbar/debugbar_1784542399.439764.json",
     "writable/debugbar/debugbar_1784542399.416413.json",
     "writable/debugbar/debugbar_1784542387.315683.json",
     "writable/debugbar/debugbar_1784542387.304184.json",
     "writable/debugbar/debugbar_1784542346.908502.json",
     "writable/debugbar/debugbar_1784542346.875326.json",
-    "writable/session/ci_sessione23a1d9c925d714558c18262a11f2d53",
     "writable/debugbar/debugbar_1784542272.730564.json",
-    "Tache.md"
+    "writable/debugbar/debugbar_1784542272.711775.json"
   ]
 }
