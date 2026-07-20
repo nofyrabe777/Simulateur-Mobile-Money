@@ -249,3 +249,162 @@ in SYSTEMPATH\Database\Database.php on line 186.
  9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
 10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
 11 SYSTEMPATH\rewrite.php(44): require_once('D:\\MR Rojo\\Simulateur-Mobile-Money\\public\\index.php')
+ERROR - 2026-07-20 08:55:40 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#5 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#7 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/app/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+#8 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#9 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#10 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#11 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#13 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#14 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/rewrite.php(44): require_once('...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#6 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/app/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+#7 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#8 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-07-20 08:55:40 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: auth/login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+ 6 APPPATH/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php')
+ERROR - 2026-07-20 08:55:53 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#5 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#7 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/app/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+#8 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#9 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#10 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#11 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#13 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#14 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/rewrite.php(44): require_once('...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#6 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/app/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+#7 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#8 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-07-20 08:55:53 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: auth/login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+ 6 APPPATH/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php')
+ERROR - 2026-07-20 09:03:36 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#5 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#7 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/app/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+#8 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#9 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#10 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#11 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#13 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#14 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/rewrite.php(44): require_once('...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#6 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/app/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+#7 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#8 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-07-20 09:03:36 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: auth/login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+ 6 APPPATH/Controllers/AuthController.php(26): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/nofy/Documents/SI-IHM/Examen-Final-S4/Simulateur-Mobile-Money/public/index.php')
