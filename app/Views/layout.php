@@ -19,7 +19,7 @@
         <!-- Détection si l'URL courante correspond à la zone Opérateur -->
         <?php if (strpos(current_url(), 'operateur') !== false): ?>
             <!-- Affichage spécifique pour l'espace Opérateur -->
-            <a class="navbar-brand text-warning" href="<?= base_url('operateur/dashboard') ?>">⚙️ Administration Opérateur</a>
+            <a class="navbar-brand text-warning" href="<?= base_url('operateur/dashboard') ?>"> Administration Opérateur</a>
             <div class="ms-auto">
                 <a href="<?= base_url('/') ?>" class="btn btn-outline-light btn-sm">Quitter l'espace Admin</a>
             </div>
@@ -30,7 +30,7 @@
                 <?php if (session()->get('client_session')): ?>
                     <?php $sessionUser = session()->get('client_session'); ?>
                     <!-- Gestion adaptative selon le nom de votre colonne en BDD (tel ou telephone) -->
-                    <span class="text-white me-3">📱 <?= $sessionUser['tel'] ?? $sessionUser['telephone'] ?? '' ?></span>
+                    <span class="text-white me-3"> <?= $sessionUser['tel'] ?? $sessionUser['telephone'] ?? '' ?></span>
                     <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger btn-sm">Déconnexion</a>
                 <?php endif; ?>
             </div>
