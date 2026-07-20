@@ -18,6 +18,9 @@ class TransactionsModel extends Model
         'id_compte_destinataire',
         'montant',
         'frais',
+        'frais_retrait_inclus',
+        'commission_interoperateur',
+        'id_operateur_destinataire',
         'date_transaction'
     ];
 

@@ -6,6 +6,8 @@ use App\Models\CompteModel;
 use App\Models\TransactionsModel;
 use App\Models\PrefixeModel;
 use App\Models\BaremeModel;
+use App\Models\OperateurModel;
+use App\Models\InteroperatorCommissionModel;
 
 class TransactionsController extends BaseController
 {
@@ -19,6 +21,8 @@ class TransactionsController extends BaseController
         $compteModel = new CompteModel();
         $prefixeModel = new PrefixeModel();
         $baremeModel = new BaremeModel();
+        $operateurModel = new OperateurModel();
+        $commissionModel = new InteroperatorCommissionModel();
         $txModel = new TransactionsModel();
 
         $expediteur = $compteModel->find($session['id']);
@@ -36,17 +40,19 @@ class TransactionsController extends BaseController
 
         // 2. Vérifier que tous les destinataires appartiennent au MÊME opérateur
         $idOperateurCommun = null;
-        $prefixesData = $prefixeModel->findAll(); // Doit contenir un champ 'id_operateur' ou 'type_reseau' grâce à la tâche de Nofy
+        $communEstExterne = false;
+        $prefixesData = $prefixeModel->findAll();
+
+        usort($prefixesData, function ($a, $b) {
+            return strlen($b['prefixe']) - strlen($a['prefixe']);
+        });
 
         foreach ($destinataires as $num) {
             $operateurDuNumero = null;
-            $estExterne = true;
 
             foreach ($prefixesData as $p) {
                 if (strpos($num, $p['prefixe']) === 0) {
-                    // Supposons que Nofy a ajouté 'type_reseau' ('propre' ou 'externe') ou 'id_operateur'
-                    $operateurDuNumero = $p['id_operateur'] ?? $p['type_reseau'] ?? 'default';
-                    $estExterne = isset($p['type_reseau']) && $p['type_reseau'] === 'externe';
+                    $operateurDuNumero = $p['id_operateur'];
                     break;
                 }
             }
@@ -57,10 +63,17 @@ class TransactionsController extends BaseController
 
             if ($idOperateurCommun === null) {
                 $idOperateurCommun = $operateurDuNumero;
-                $communEstExterne = $estExterne; 
+                $operateurDest = $operateurModel->find($operateurDuNumero);
+                $communEstExterne = isset($operateurDest['type_reseau']) && $operateurDest['type_reseau'] === 'externe';
             } elseif ($idOperateurCommun !== $operateurDuNumero) {
-                return redirect()->back()->with('error', "Tous les numéros doivent appartenir au même opérateur.");
+                return redirect()->back()->with('error', 'Tous les numéros doivent appartenir au même opérateur.');
             }
+        }
+
+        $commissionRate = 0;
+        if ($communEstExterne) {
+            $commissionConfig = $commissionModel->where('id_operateur', $idOperateurCommun)->first();
+            $commissionRate = $commissionConfig ? (float)$commissionConfig['pourcentage'] : 0;
         }
 
         // 3. Division équitable du montant
@@ -85,9 +98,14 @@ class TransactionsController extends BaseController
             $fraisRetraitUnitaire = $baremeRetrait ? (float)$baremeRetrait['frais'] : 0;
         }
 
+        $commissionUnitaire = 0;
+        if ($communEstExterne && $commissionRate > 0) {
+            $commissionUnitaire = ($montantParDestinataire * $commissionRate) / 100;
+        }
+
         // 4. Calcul du coût total requis chez l'expéditeur
-        // Formule : (Montant à envoyer + Frais Envoi + Frais Retrait éventuels) * Nombre de personnes
-        $coutTotalRetire = ($montantParDestinataire + $fraisEnvoiUnitaire + $fraisRetraitUnitaire) * $totalDestinataires;
+        // Formule : (Montant à envoyer + Frais Envoi + Frais Retrait éventuels + Commission) * Nombre de personnes
+        $coutTotalRetire = ($montantParDestinataire + $fraisEnvoiUnitaire + $fraisRetraitUnitaire + $commissionUnitaire) * $totalDestinataires;
 
         if ($expediteur['solde'] < $coutTotalRetire) {
             return redirect()->back()->with('error', "Solde insuffisant. Il vous faut au total " . number_format($coutTotalRetire, 2, ',', ' ') . " Ar (Frais inclus).");
@@ -121,13 +139,15 @@ class TransactionsController extends BaseController
 
             // Enregistrer la transaction
             $txModel->insert([
-                'id_compte_expediteur'   => $expediteur['id'],
-                'id_compte_destinataire' => $destCompte['id'],
-                'id_type_operation'      => 3, // Transfert
-                'montant'                => $montantParDestinataire,
-                'frais'                  => $fraisEnvoiUnitaire,
-                'frais_retrait_inclus'   => $fraisRetraitUnitaire, // Nouveau champ pour le suivi opérateur si nécessaire
-                'date_transaction'       => date('Y-m-d H:i:s')
+                'id_compte_expediteur'        => $expediteur['id'],
+                'id_compte_destinataire'      => $destCompte['id'],
+                'id_type_operation'           => 3, // Transfert
+                'montant'                     => $montantParDestinataire,
+                'frais'                       => $fraisEnvoiUnitaire,
+                'frais_retrait_inclus'        => $fraisRetraitUnitaire,
+                'commission_interoperateur'   => $commissionUnitaire,
+                'id_operateur_destinataire'   => $idOperateurCommun,
+                'date_transaction'            => date('Y-m-d H:i:s')
             ]);
         }
 
