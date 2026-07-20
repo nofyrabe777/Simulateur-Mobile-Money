@@ -10,9 +10,9 @@
                     <h1 class="display-5 fw-bold"><?= number_format($compte['solde'], 2, ',', ' ') ?> <small class="fs-4">Ar</small></h1>
                 </div>
                 <div>
-                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalDepot">➕ Dépôt</button>
-                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalRetrait">➖ Retrait</button>
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTransfert">✈️ Transfert</button>
+                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalDepot"> Dépôt</button>
+                    <button class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalRetrait"> Retrait</button>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTransfert"> Transfert</button>
                 </div>
             </div>
         </div>
