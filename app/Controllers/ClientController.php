@@ -26,7 +26,7 @@ class ClientController extends BaseController
                               ->orderBy('date_transaction', 'DESC')
                               ->findAll();
 
-        return view('client/dashboard', [
+        return view('index', [
             'compte' => $compte,
             'historique' => $historique
         ]);
