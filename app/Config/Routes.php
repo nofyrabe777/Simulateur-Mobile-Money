@@ -6,11 +6,11 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// --- ACCUEIL & AUTHENTIFICATION ---
-// L'index affiche uniquement le formulaire de login si non connecté
-$routes->get('/', 'ClientController::index'); 
-$routes->post('auth/login', 'AuthController::login');
-$routes->get('auth/logout', 'AuthController::logout');
+// --- ZONE PUBLIQUE & ACCUEIL ---
+$routes->get('/', 'ClientController::index');              // Affiche la page d'accueil avec les 2 choix (Client / Opérateur)
+$routes->get('auth/login', 'ClientController::loginForm'); // Affiche le formulaire de connexion client
+$routes->post('auth/login', 'AuthController::login');      // Traite la soumission du formulaire de connexion
+$routes->get('auth/logout', 'AuthController::logout');    // Gère la déconnexion du client
 
 // --- ESPACE CLIENT (Sécurisé par session) ---
 $routes->group('client', function($routes) {
