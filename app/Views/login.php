@@ -15,7 +15,7 @@
                         <label for="tel" class="form-label">Numéro de téléphone</label>
                         <input type="text" class="form-control form-control-lg" id="tel" name="tel" placeholder="Ex: 033/037 XX XXX XX" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg w-100">Se connecter / S'inscrire</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Se connecter</button>
                 </form>
             </div>
         </div>
