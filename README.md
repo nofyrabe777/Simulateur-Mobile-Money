@@ -1,1 +1,4 @@
 # Simulateur-Mobile-Money
+
+**Configuration :**
+
