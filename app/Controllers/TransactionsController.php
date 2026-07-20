@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\TransactionsModel;
 use App\Models\CompteModel;
-use App\Models\BaremeModel;
+use App\Models\BaremesModel;
 
 class TransactionController extends BaseController
 {
@@ -16,7 +16,7 @@ class TransactionController extends BaseController
     {
         $this->transactionModel = new TransactionsModel();
         $this->compteModel      = new CompteModel();
-        $this->baremeModel      = new BaremeModel();
+        $this->baremeModel      = new BaremesModel();
     }
 
     /**
