@@ -6,7 +6,7 @@ use App\Models\TransactionsModel;
 use App\Models\CompteModel;
 use App\Models\BaremesModel;
 
-class TransactionController extends BaseController
+class TransactionsController extends BaseController
 {
     protected $transactionModel;
     protected $compteModel;
@@ -17,6 +17,30 @@ class TransactionController extends BaseController
         $this->transactionModel = new TransactionsModel();
         $this->compteModel      = new CompteModel();
         $this->baremeModel      = new BaremesModel();
+    }
+
+    private function getCompteActifId()
+    {
+        $compteId = $this->request->getPost('compte_id');
+        if (empty($compteId)) {
+            $session = session()->get('client_session');
+            $compteId = $session['id'] ?? null;
+        }
+
+        return $compteId;
+    }
+
+    private function handleResponse(array $payload)
+    {
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON($payload);
+        }
+
+        $redirect = redirect()->to('/client/dashboard');
+
+        return $payload['status'] === 'success'
+            ? $redirect->with('success', $payload['message'])
+            : $redirect->with('error', $payload['message']);
     }
 
     /**
@@ -53,21 +77,37 @@ class TransactionController extends BaseController
         ]);
     }
 
+    public function store()
+    {
+        $typeOperation = (int) $this->request->getPost('type_operation');
+
+        return match ($typeOperation) {
+            1 => $this->depot(),
+            2 => $this->retrait(),
+            3 => $this->transfert(),
+            default => $this->handleResponse(['status' => 'error', 'message' => 'Type d\'opération invalide'])
+        };
+    }
+
     /**
      * Dépôt : Aucun frais
      */
     public function depot()
     {
-        $compteId = $this->request->getPost('compte_id');
+        $compteId = $this->getCompteActifId();
         $montant  = (float) $this->request->getPost('montant');
 
+        if (empty($compteId)) {
+            return $this->handleResponse(['status' => 'error', 'message' => 'Compte non identifié']);
+        }
+
         if ($montant <= 0) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Montant invalide']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Montant invalide']);
         }
 
         $compte = $this->compteModel->find($compteId);
         if (!$compte) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Compte inexistant']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Compte inexistant']);
         }
 
         $db = \Config\Database::connect();
@@ -89,10 +129,10 @@ class TransactionController extends BaseController
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Erreur lors du dépôt']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Erreur lors du dépôt']);
         }
 
-        return $this->response->setJSON([
+        return $this->handleResponse([
             'status'        => 'success',
             'message'       => 'Dépôt réussi',
             'nouveau_solde' => $nouveauSolde
@@ -104,16 +144,20 @@ class TransactionController extends BaseController
      */
     public function retrait()
     {
-        $compteId = $this->request->getPost('compte_id');
+        $compteId = $this->getCompteActifId();
         $montant  = (float) $this->request->getPost('montant');
 
+        if (empty($compteId)) {
+            return $this->handleResponse(['status' => 'error', 'message' => 'Compte non identifié']);
+        }
+
         if ($montant <= 0) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Montant invalide']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Montant invalide']);
         }
 
         $compte = $this->compteModel->find($compteId);
         if (!$compte) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Compte inexistant']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Compte inexistant']);
         }
 
         // --- CALCULS ET VALIDATION DANS LE CONTRÔLEUR ---
@@ -121,7 +165,7 @@ class TransactionController extends BaseController
         $totalADebiter = $montant + $frais;
 
         if ($compte['solde'] < $totalADebiter) {
-            return $this->response->setJSON([
+            return $this->handleResponse([
                 'status'  => 'error', 
                 'message' => 'Solde insuffisant. Requis : ' . $totalADebiter . ' Ar (Montant: ' . $montant . ' + Frais: ' . $frais . ')'
             ]);
@@ -146,10 +190,10 @@ class TransactionController extends BaseController
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Erreur lors du retrait']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Erreur lors du retrait']);
         }
 
-        return $this->response->setJSON([
+        return $this->handleResponse([
             'status'        => 'success',
             'message'       => 'Retrait effectué avec succès',
             'frais'         => $frais,
@@ -162,19 +206,29 @@ class TransactionController extends BaseController
      */
     public function transfert()
     {
-        $expediteurId   = $this->request->getPost('expediteur_id');
-        $destinataireId = $this->request->getPost('destinataire_id');
+        $expediteurId = $this->request->getPost('expediteur_id') ?: $this->getCompteActifId();
+        $destinataireTelephone = trim($this->request->getPost('destinataire') ?? '');
         $montant        = (float) $this->request->getPost('montant');
 
-        if ($montant <= 0 || $expediteurId == $destinataireId) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Informations de transfert invalides']);
+        if (empty($expediteurId) || empty($destinataireTelephone)) {
+            return $this->handleResponse(['status' => 'error', 'message' => 'Informations de transfert invalides']);
         }
 
-        $expediteur   = $this->compteModel->find($expediteurId);
-        $destinataire = $this->compteModel->find($destinataireId);
+        if ($montant <= 0) {
+            return $this->handleResponse(['status' => 'error', 'message' => 'Montant invalide']);
+        }
+
+        $expediteur = $this->compteModel->find($expediteurId);
+        $destinataire = $this->compteModel->where('telephone', $destinataireTelephone)->first();
 
         if (!$expediteur || !$destinataire) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Compte expéditeur ou destinataire introuvable']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Compte expéditeur ou destinataire introuvable']);
+        }
+
+        $destinataireId = $destinataire['id'];
+
+        if ($expediteurId == $destinataireId) {
+            return $this->handleResponse(['status' => 'error', 'message' => 'Vous ne pouvez pas vous transférer de l\'argent à vous-même']);
         }
 
         // --- CALCULS ET VALIDATION DANS LE CONTRÔLEUR ---
@@ -182,7 +236,7 @@ class TransactionController extends BaseController
         $totalADebiter = $montant + $frais;
 
         if ($expediteur['solde'] < $totalADebiter) {
-            return $this->response->setJSON([
+            return $this->handleResponse([
                 'status'  => 'error', 
                 'message' => 'Solde insuffisant pour le transfert (Total requis avec frais: ' . $totalADebiter . ' Ar)'
             ]);
@@ -211,10 +265,10 @@ class TransactionController extends BaseController
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Erreur lors du transfert']);
+            return $this->handleResponse(['status' => 'error', 'message' => 'Erreur lors du transfert']);
         }
 
-        return $this->response->setJSON([
+        return $this->handleResponse([
             'status'        => 'success',
             'message'       => 'Transfert réussi',
             'frais'         => $frais,
