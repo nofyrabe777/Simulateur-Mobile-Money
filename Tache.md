@@ -34,9 +34,7 @@ création de base de données `base.sql`
 
 **interface :**
 
- - création des vues Bootstrap
- - navigation entre les pages
- - validation des formulaires
+ - `dashboard.php`
 
 **tests et correction de la base de données**
 
@@ -74,9 +72,9 @@ création de base de données `base.sql`
 
 **interface :**
 
- - création des vues Bootstrap
- - navigation entre les pages
- - validation des formulaires
+ - `layout.php`
+ - `login.php`
+ - 
 
 **tests, intégration et correction des bugs**
 
