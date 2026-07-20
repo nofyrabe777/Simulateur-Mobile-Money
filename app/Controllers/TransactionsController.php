@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\CompteModel;
 use App\Models\TransactionsModel;
 use App\Models\PrefixeModel;
-use App\Models\BaremeModel;
+use App\Models\BaremesModel;
 use App\Models\OperateurModel;
 use App\Models\InteroperatorCommissionModel;
 
@@ -20,22 +20,83 @@ class TransactionsController extends BaseController
 
         $compteModel = new CompteModel();
         $prefixeModel = new PrefixeModel();
-        $baremeModel = new BaremeModel();
+        $baremeModel = new BaremesModel();
         $operateurModel = new OperateurModel();
         $commissionModel = new InteroperatorCommissionModel();
         $txModel = new TransactionsModel();
 
         $expediteur = $compteModel->find($session['id']);
+        $typeOperation = (int)$this->request->getPost('type_operation');
         $montantTotal = (float)$this->request->getPost('montant');
-        $rawDestinataires = $this->request->getPost('destinataires');
         $inclureFraisRetrait = $this->request->getPost('inclure_frais') == '1';
 
-        // 1. Nettoyer et extraire la liste des numéros
+        if ($montantTotal <= 0) {
+            return redirect()->back()->with('error', 'Montant invalide.');
+        }
+
+        if ($typeOperation === 1) {
+            // Dépôt
+            $compteModel->update($expediteur['id'], [
+                'solde' => $expediteur['solde'] + $montantTotal
+            ]);
+
+            $txModel->insert([
+                'id_compte_expediteur'   => $expediteur['id'],
+                'id_compte_destinataire' => null,
+                'id_type_operation'      => 1,
+                'montant'                => $montantTotal,
+                'frais'                  => 0,
+                'frais_retrait_inclus'   => 0,
+                'commission_interoperateur' => 0,
+                'id_operateur_destinataire' => null,
+                'date_transaction'       => date('Y-m-d H:i:s')
+            ]);
+
+            return redirect()->to('/client/dashboard')->with('success', 'Dépôt effectué avec succès.');
+        }
+
+        if ($typeOperation === 2) {
+            // Retrait
+            $baremeRetrait = $baremeModel->where('id_type_operation', 2)
+                                         ->where('montant_min <=', $montantTotal)
+                                         ->where('montant_max >=', $montantTotal)
+                                         ->first();
+            $fraisRetrait = $baremeRetrait ? (float)$baremeRetrait['frais'] : 0;
+            $coutTotal = $montantTotal + $fraisRetrait;
+
+            if ($expediteur['solde'] < $coutTotal) {
+                return redirect()->back()->with('error', 'Solde insuffisant pour ce retrait.');
+            }
+
+            $compteModel->update($expediteur['id'], [
+                'solde' => $expediteur['solde'] - $coutTotal
+            ]);
+
+            $txModel->insert([
+                'id_compte_expediteur'   => $expediteur['id'],
+                'id_compte_destinataire' => null,
+                'id_type_operation'      => 2,
+                'montant'                => $montantTotal,
+                'frais'                  => $fraisRetrait,
+                'frais_retrait_inclus'   => 0,
+                'commission_interoperateur' => 0,
+                'id_operateur_destinataire' => null,
+                'date_transaction'       => date('Y-m-d H:i:s')
+            ]);
+
+            return redirect()->to('/client/dashboard')->with('success', 'Retrait effectué avec succès.');
+        }
+
+        if ($typeOperation !== 3) {
+            return redirect()->back()->with('error', 'Type d\'opération invalide.');
+        }
+
+        $rawDestinataires = $this->request->getPost('destinataires');
         $destinataires = array_filter(array_map('trim', explode(',', $rawDestinataires)));
         $totalDestinataires = count($destinataires);
 
-        if ($totalDestinataires === 0 || $montantTotal <= 0) {
-            return redirect()->back()->with('error', 'Données de transaction invalides.');
+        if ($totalDestinataires === 0) {
+            return redirect()->back()->with('error', 'Aucun destinataire spécifié.');
         }
 
         // 2. Vérifier que tous les destinataires appartiennent au MÊME opérateur
@@ -122,9 +183,14 @@ class TransactionsController extends BaseController
 
         foreach ($destinataires as $num) {
             // Connexion/Création automatique du compte destinataire
-            $destCompte = $compteModel->where('telephone', $num)->orWhere('tel', $num)->first();
+            $query = $compteModel->where('telephone', $num);
+            if (in_array('tel', $compteModel->allowedFields, true)) {
+                $query = $query->orWhere('tel', $num);
+            }
+            $destCompte = $query->first();
+
             if (!$destCompte) {
-                $fieldName = array_contains($compteModel->allowedFields, 'tel') ? 'tel' : 'telephone';
+                $fieldName = in_array('tel', $compteModel->allowedFields, true) ? 'tel' : 'telephone';
                 $destId = $compteModel->insert([$fieldName => $num, 'solde' => 0.0]);
                 $destCompte = $compteModel->find($destId);
             }
