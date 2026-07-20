@@ -8,6 +8,14 @@ class AuthController extends BaseController
 {
     public function login()
     {
+        if ($this->request->getMethod() === 'get') {
+            if (session()->get('client_session')) {
+                return redirect()->to('/client/dashboard');
+            }
+
+            return view('auth/login');
+        }
+
         $tel = $this->request->getPost('tel');
         if (empty($tel)) {
             return redirect()->back()->with('error', 'Le numéro de téléphone est requis.');

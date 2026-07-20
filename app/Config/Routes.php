@@ -9,9 +9,8 @@ use App\Controllers\TransactionsController;
  * @var RouteCollection $routes
  */
 // --- ACCUEIL & AUTHENTIFICATION ---
-$routes->get('/', 'ClientController::dashboard'); 
-// Redirige vers le dashboard (qui gère le filtre de session) ou une vue login
-$routes->post('auth/login', 'AuthController::login');
+$routes->get('/', 'Home::index');
+$routes->match(['get', 'post'], 'auth/login', 'AuthController::login');
 $routes->get('auth/logout', 'AuthController::logout');
 
 // --- ESPACE CLIENT (Sécurisé par session) ---
