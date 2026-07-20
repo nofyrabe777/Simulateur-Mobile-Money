@@ -144,8 +144,22 @@
 <!-- Configuration des barèmes -->
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-white py-3 fw-bold">Configuration des Barèmes de Frais</div>
+    <div class="card-body">
+        <?php $baremeTypes = array_values(array_unique(array_column($baremes, 'type'))); ?>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="bareme-type-filter" class="form-label">Filtrer par type d'opération</label>
+                <select id="bareme-type-filter" class="form-select">
+                    <option value="">Tous</option>
+                    <?php foreach ($baremeTypes as $type): ?>
+                        <option value="<?= htmlspecialchars($type, ENT_QUOTES, 'UTF-8') ?>"><?= $type ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table id="baremes-table" class="table table-hover align-middle mb-0">
             <thead>
                 <tr>
                     <th>Type</th>
@@ -157,7 +171,7 @@
             </thead>
             <tbody>
                 <?php foreach($baremes as $b): ?>
-                    <tr>
+                    <tr data-type="<?= htmlspecialchars($b['type'], ENT_QUOTES, 'UTF-8') ?>">
                         <form action="<?= base_url('operateur/bareme/update') ?>" method="POST">
                             <input type="hidden" name="id" value="<?= $b['id'] ?>">
                             <td><span class="badge bg-dark"><?= $b['type'] ?></span></td>
@@ -172,4 +186,17 @@
         </table>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filter = document.getElementById('bareme-type-filter');
+        const rows = document.querySelectorAll('#baremes-table tbody tr');
+
+        filter.addEventListener('change', function() {
+            const value = this.value;
+            rows.forEach(function(row) {
+                row.style.display = value === '' || row.dataset.type === value ? '' : 'none';
+            });
+        });
+    });
+</script>
 <?= $this->endSection() ?>
