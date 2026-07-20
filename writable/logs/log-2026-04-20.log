@@ -1,0 +1,12 @@
+CRITICAL - 2026-04-20 12:52:04 --> ErrorException: preg_match(): Compilation failed: missing closing parenthesis at offset 17
+[Method: GET, Route: produit/1]
+in SYSTEMPATH/Router/Router.php on line 463.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 SYSTEMPATH/Router/Router.php(463): preg_match()
+ 3 SYSTEMPATH/Router/Router.php(225): CodeIgniter\Router\Router->checkRoutes()
+ 4 SYSTEMPATH/CodeIgniter.php(829): CodeIgniter\Router\Router->handle()
+ 5 SYSTEMPATH/CodeIgniter.php(441): CodeIgniter\CodeIgniter->tryToRouteIt()
+ 6 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
