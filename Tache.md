@@ -17,11 +17,11 @@ création de base de données `base.sql`
 
 **creation model :**
 
- - TransactionModel.php
+ - `TransactionModel.php`
 
 **creation controller :**
 
- - TransactionController.php
+ - `TransactionController.php`
 
 **fonctionnalités :**
  - enregistrement des opérations
@@ -40,21 +40,18 @@ création de base de données `base.sql`
 
 **creation models :**
 
- - PrefixeModel.php
- - CompteModel.php
- - TypeOperationModel.php
- - BaremesModel.php
+ - `PrefixeModel.php`
+ - `CompteModel.php`
+ - `TypeOperationModel.php`
+ - `BaremesModel.php`
 
 **creation controllers :**
 
- - AuthController.php
- - ClientController.php
- - DepotController.php
- - RetraitController.php
- - TransfertController.php
- - HistoriqueController.php
- - PrefixeController.php
- - BaremeController.php
+ - `AuthController.php`
+ - `ClientController.php`
+ - `HistoriqueController.php`
+ - `PrefixeController.php`
+ - `BaremeController.php`
 
 **fonctionnalités :**
 

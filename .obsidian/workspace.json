@@ -185,6 +185,9 @@
   },
   "active": "e5b8df27f186b574",
   "lastOpenFiles": [
+    "app/Controllers/TransactionsController.php",
+    "app/Models/TransactionsModel.php",
+    "app/Models/TransactionModel.php",
     "app/Models/TypeOperationModel",
     "app/Models/PrefixeModel.php",
     "app/Models/CompteModel.php",
