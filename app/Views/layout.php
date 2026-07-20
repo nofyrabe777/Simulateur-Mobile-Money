@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulation Mobile Money</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="<?= base_url('css/bootstrap.min.css') ?>">
+    
     <style>
         body { background-color: #f8f9fa; }
         .navbar-brand { font-weight: bold; letter-spacing: 1px; }
@@ -41,8 +43,8 @@
 
     <?= $this->renderSection('content') ?>
 </div>
-<!-- Bootstrap 5 JS Bundle -->
-<script src="public/js/bootstrap.bundle.min.js"></script>
+
+<script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
 
 </body>
 </html>
