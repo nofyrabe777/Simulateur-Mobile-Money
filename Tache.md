@@ -130,3 +130,5 @@ création de base de données `base.sql`
     - Tests d'intégration et correction des bugs.
         
     - Création et publication du tag `v2` sur Git.
+    - page iray epargne 50% : dikany izany de 50% ihnay no makany aminy compte principale fa 50 %makany amin  epargne 
+    

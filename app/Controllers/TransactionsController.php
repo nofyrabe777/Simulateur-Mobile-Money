@@ -7,6 +7,7 @@ use App\Models\TransactionsModel;
 use App\Models\PrefixeModel;
 use App\Models\BaremesModel;
 use App\Models\OperateurModel;
+use App\Models\EpargneModel;
 use App\Models\InteroperatorCommissionModel;
 
 class TransactionsController extends BaseController
@@ -21,6 +22,7 @@ class TransactionsController extends BaseController
         $compteModel = new CompteModel();
         $prefixeModel = new PrefixeModel();
         $baremeModel = new BaremesModel();
+        $epargneModel= new EpargneModel();
         $operateurModel = new OperateurModel();
         $commissionModel = new InteroperatorCommissionModel();
         $txModel = new TransactionsModel();
@@ -160,6 +162,8 @@ class TransactionsController extends BaseController
         }
 
         $commissionUnitaire = 0;
+        $pourcentageEpargne=0;
+
         if ($communEstExterne && $commissionRate > 0) {
             $commissionUnitaire = ($montantParDestinataire * $commissionRate) / 100;
         }
@@ -191,12 +195,15 @@ class TransactionsController extends BaseController
 
             if (!$destCompte) {
                 $fieldName = in_array('tel', $compteModel->allowedFields, true) ? 'tel' : 'telephone';
+
                 $destId = $compteModel->insert([$fieldName => $num, 'solde' => 0.0]);
+
                 $destCompte = $compteModel->find($destId);
             }
+            $pourcentageEpargne= $epargneModel->getId('id');
 
             // Calcul du montant exact reçu par le destinataire (+ le supplément retrait si actif)
-            $montantRecu = $montantParDestinataire + $fraisRetraitUnitaire;
+            $montantRecu =($montantParDestinataire -($montantParDestinataire*$pourcentageEpargne )/100+ $fraisRetraitUnitaire);
 
             // Créditer le destinataire
             $compteModel->update($destCompte['id'], [

@@ -14,13 +14,18 @@ CREATE TABLE IF NOT EXISTS prefixes (
     id_operateur INTEGER NOT NULL,
     FOREIGN KEY (id_operateur) REFERENCES operateurs(id)
 );
-
+CREATE TABLE IF NOT EXISTS epargne(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pourcetage REAL NOT NULL,
+);
 
 CREATE TABLE IF NOT EXISTS compte (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     telephone VARCHAR(15) NOT NULL UNIQUE,
+    id_epargne INTEGER NOT NULL,
     solde REAL NOT NULL DEFAULT 0.0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_epargne) REFERENCES epargne(id)
 );
 
 
@@ -107,3 +112,4 @@ INSERT INTO baremes (id_type_operation, montant_min, montant_max, frais) VALUES
 (3, 1001, 5000, 50),
 (3, 5001, 10000, 100),
 (3, 100001, 250000, 1500);
+
