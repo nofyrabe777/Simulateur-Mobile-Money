@@ -14,13 +14,18 @@ CREATE TABLE IF NOT EXISTS prefixes (
     id_operateur INTEGER NOT NULL,
     FOREIGN KEY (id_operateur) REFERENCES operateurs(id)
 );
-
+CREATE TABLE IF NOT EXISTS epargne(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pourcetage REAL NOT NULL,
+);
 
 CREATE TABLE IF NOT EXISTS compte (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     telephone VARCHAR(15) NOT NULL UNIQUE,
+    id_epargne INTEGER NOT NULL,
     solde REAL NOT NULL DEFAULT 0.0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_epargne) REFERENCES epargne(id)
 );
 
 
