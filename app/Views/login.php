@@ -15,6 +15,7 @@
                         <input type="text" class="form-control form-control-lg" id="tel" name="tel" placeholder="Ex:  XXX XX XXX XX" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Se connecter</button>
+                    <button type="button" class="btn btn-secondary btn-lg w-100" onclick="window.history.back();">Retour</button>
                 </form>
             </div>
         </div>
