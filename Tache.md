@@ -62,6 +62,8 @@ création de base de données `base.sql`
 - **Tests & Recette :**
     
     - Validation des calculs des commissions inter-opérateurs.
+
+    Promotion en % sur le frait de transfert au meme operateur
 ---
 
 # Eric
@@ -130,3 +132,5 @@ création de base de données `base.sql`
     - Tests d'intégration et correction des bugs.
         
     - Création et publication du tag `v2` sur Git.
+
+     

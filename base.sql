@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     commission_interoperateur REAL NOT NULL DEFAULT 0.0,
     id_operateur_destinataire INTEGER NULL,
     date_transaction DATETIME DEFAULT CURRENT_TIMESTAMP,
+    promotion REAL NOT NULL 00.0,
     FOREIGN KEY (id_type_operation) REFERENCES type_operations(id),
     FOREIGN KEY (id_compte_expediteur) REFERENCES compte(id),
     FOREIGN KEY (id_compte_destinataire) REFERENCES compte(id),
@@ -107,3 +108,4 @@ INSERT INTO baremes (id_type_operation, montant_min, montant_max, frais) VALUES
 (3, 1001, 5000, 50),
 (3, 5001, 10000, 100),
 (3, 100001, 250000, 1500);
+
