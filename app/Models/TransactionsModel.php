@@ -21,7 +21,8 @@ class TransactionsModel extends Model
         'frais_retrait_inclus',
         'commission_interoperateur',
         'id_operateur_destinataire',
-        'date_transaction'
+        'date_transaction',
+        'promotion'
     ];
 
     protected $useTimestamps = false; // La date est gérée par SQLite (DEFAULT CURRENT_TIMESTAMP)
