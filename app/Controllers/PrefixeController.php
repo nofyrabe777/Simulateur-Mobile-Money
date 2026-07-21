@@ -22,6 +22,11 @@ class PrefixeController extends BaseController
             return redirect()->back()->with('error', 'Opérateur invalide.');
         }
 
+        $existing = $prefixeModel->where('prefixe', $prefixe)->first();
+        if ($existing) {
+            return redirect()->back()->with('error', 'Ce préfixe existe déjà.');
+        }
+
         $prefixeModel->insert([
             'prefixe'      => $prefixe,
             'id_operateur' => $idOperateur

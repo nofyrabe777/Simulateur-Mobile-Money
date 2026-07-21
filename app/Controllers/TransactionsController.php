@@ -137,10 +137,10 @@ class TransactionsController extends BaseController
             $commissionRate = $commissionConfig ? (float)$commissionConfig['pourcentage'] : 0;
         }
 
-        // 3. Division équitable du montant
-        $montantParDestinataire = $montantTotal / $totalDestinataires;
+        // 3. Montant saisi par destinataire
+        $montantParDestinataire = $montantTotal;
         
-        // Détermination des frais d'envoi globaux pour la tranche du montant divisé
+        // Détermination des frais d'envoi globaux pour la tranche du montant par destinataire
         // Type 3 = Transfert
         $baremeEnvoi = $baremeModel->where('id_type_operation', 3)
                                    ->where('montant_min <=', $montantParDestinataire)

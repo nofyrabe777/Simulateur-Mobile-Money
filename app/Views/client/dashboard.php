@@ -126,10 +126,11 @@
                     <small class="text-muted d-block mt-1">Séparez les numéros par une virgule (,) pour un envoi groupé.</small>
                 </div>
                 
-                <!-- Montant total -->
+                <!-- Montant par destinataire -->
                 <div class="mb-3">
-                    <label for="montant_tx" class="form-label fw-bold">Montant Total à Envoyer (Ar)</label>
+                    <label for="montant_tx" class="form-label fw-bold">Montant par destinataire (Ar)</label>
                     <input type="number" step="0.01" id="montant_tx" name="montant" class="form-control" required min="1">
+                    <small class="text-muted d-block mt-1">Le montant saisi sera envoyé à chaque destinataire.</small>
                     <div id="info-division-modale" class="alert alert-info py-2 px-3 mt-2 mb-0 small" style="display: none;"></div>
                 </div>
 
