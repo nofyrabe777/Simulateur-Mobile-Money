@@ -77,11 +77,11 @@ INSERT OR IGNORE INTO prefixes (prefixe, id_operateur) VALUES
 ('037', 1),
 ('034', 1),
 ('032', 2),
-('031', 3);
+('038', 3);
 
 
 INSERT OR IGNORE INTO type_operations (id, nom) VALUES 
-(1, 'Dépôt'),
+(1, 'Depot'),
 (2, 'Retrait'),
 (3, 'Transfert');
 
