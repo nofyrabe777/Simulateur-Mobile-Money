@@ -10,7 +10,7 @@
         protected $primaryKey       = 'id';
         protected $useAutoIncrement = true;
         protected $returnType       = 'array';
-        protected $allowedFields    = ['telephone', 'solde'];
+        protected $allowedFields    = ['telephone', 'solde','id_epargne'];
 
         // Si vous préférez que CodeIgniter gère automatiquement le created_at
         protected $useTimestamps    = true;

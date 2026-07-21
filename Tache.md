@@ -132,5 +132,3 @@ création de base de données `base.sql`
     - Tests d'intégration et correction des bugs.
         
     - Création et publication du tag `v2` sur Git.
-
-     
